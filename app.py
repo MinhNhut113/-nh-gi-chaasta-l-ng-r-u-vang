@@ -3,70 +3,50 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 import pickle
-import os
 
-# ---------------------------
-# TRAIN MODEL & SAVE
-# ---------------------------
-# Nếu chưa có file model.pkl thì sẽ train và lưu
-if not os.path.exists('model.pkl'):
-    try:
-        data = pd.read_csv('winequality-red.csv')
-        st.write("✅ Đã đọc file CSV và bắt đầu huấn luyện mô hình...")
-        X = data.drop('quality', axis=1)
-        y = data['quality']
+# Load dữ liệu và train model
+@st.cache_data
+def train_model():
+    data = pd.read_csv('winequality-red.csv')
+    X = data.drop('quality', axis=1)
+    y = data['quality']
+    model = LinearRegression()
+    model.fit(X, y)
+    return model
 
-        model = LinearRegression()
-        model.fit(X, y)
+model = train_model()
 
-        with open('model.pkl', 'wb') as f:
-            pickle.dump(model, f)
-        st.write("✅ Mô hình đã huấn luyện và lưu vào model.pkl")
-    except Exception as e:
-        st.error(f"❌ Lỗi khi đọc CSV hoặc train model: {e}")
-        st.stop()
-
-# ---------------------------
-# LOAD MODEL
-# ---------------------------
-with open('model.pkl', 'rb') as f:
-    model = pickle.load(f)
-
-# ---------------------------
-# STREAMLIT APP
-# ---------------------------
+# Giao diện
 st.set_page_config(page_title="Wine Quality Prediction", layout="centered")
-st.title("🍷 Wine Quality Prediction App")
-
-st.markdown("""
-Nhập các chỉ số hóa học để dự đoán chất lượng rượu (0-10).
+st.title("🍷 Dự đoán chất lượng rượu vang")
+st.write("""
+Dựa trên các chỉ số hóa học để dự đoán điểm chất lượng (0-10) của rượu vang.
 """)
 
-# Các input để người dùng nhập
-fixed_acidity = st.number_input("Fixed Acidity")
-volatile_acidity = st.number_input("Volatile Acidity")
-citric_acid = st.number_input("Citric Acid")
-residual_sugar = st.number_input("Residual Sugar")
-chlorides = st.number_input("Chlorides")
-free_so2 = st.number_input("Free Sulfur Dioxide")
-total_so2 = st.number_input("Total Sulfur Dioxide")
-density = st.number_input("Density", format="%.5f")
-pH = st.number_input("pH")
-sulphates = st.number_input("Sulphates")
-alcohol = st.number_input("Alcohol")
+# Tạo các input cho người dùng nhập
+fixed_acidity = st.number_input("Fixed Acidity", 0.0, 20.0, 7.4)
+volatile_acidity = st.number_input("Volatile Acidity", 0.0, 2.0, 0.7)
+citric_acid = st.number_input("Citric Acid", 0.0, 1.0, 0.0)
+residual_sugar = st.number_input("Residual Sugar", 0.0, 15.0, 1.9)
+chlorides = st.number_input("Chlorides", 0.0, 0.2, 0.076)
+free_sulfur_dioxide = st.number_input("Free Sulfur Dioxide", 0.0, 80.0, 11.0)
+total_sulfur_dioxide = st.number_input("Total Sulfur Dioxide", 0.0, 300.0, 34.0)
+density = st.number_input("Density", 0.9900, 1.0050, 0.9978)
+pH = st.number_input("pH", 2.5, 4.5, 3.51)
+sulphates = st.number_input("Sulphates", 0.3, 2.0, 0.56)
+alcohol = st.number_input("Alcohol", 8.0, 15.0, 9.4)
 
-if st.button("Predict Wine Quality"):
-    # Dự đoán
-    input_features = np.array([[fixed_acidity, volatile_acidity, citric_acid, residual_sugar,
-                                chlorides, free_so2, total_so2, density, pH, sulphates, alcohol]])
-    prediction = model.predict(input_features)[0]
+if st.button("Dự đoán chất lượng"):
+    features = np.array([[fixed_acidity, volatile_acidity, citric_acid, residual_sugar, chlorides,
+                          free_sulfur_dioxide, total_sulfur_dioxide, density, pH, sulphates, alcohol]])
+    prediction = model.predict(features)[0]
     prediction = round(prediction, 2)
-
-    # Hiển thị kết quả
-    st.subheader(f"Predicted Wine Quality: **{prediction}** (0-10)")
+    
+    st.success(f"🎯 Điểm chất lượng dự đoán: **{prediction} / 10**")
+    
     if prediction >= 7:
-        st.success("🎉 Excellent wine!")
+        st.markdown("✅ Đây là rượu vang **chất lượng cao**!")
     elif prediction >= 5:
-        st.info("🙂 Good quality wine.")
+        st.markdown("⚠️ Đây là rượu vang **trung bình**.")
     else:
-        st.warning("⚠️ Average or below quality.")
+        st.markdown("🚫 Đây là rượu vang **chất lượng thấp**.")
