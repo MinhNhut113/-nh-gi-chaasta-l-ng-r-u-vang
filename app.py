@@ -14,7 +14,7 @@ st.set_page_config(page_title="Wine Quality Prediction", layout="wide")
 st.title("🍷 Wine Quality Prediction & EDA App")
 
 # Load data
-data = pd.read_csv('winequality-red.csv', sep=';')
+data = pd.read_csv('winequality-red.csv', sep='\t')
 
 # Sidebar
 st.sidebar.header("Settings")
