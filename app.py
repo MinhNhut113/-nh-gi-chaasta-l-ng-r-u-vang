@@ -15,7 +15,6 @@ st.title("🍷 Wine Quality Prediction & EDA App")
 
 # Load data
 data = pd.read_csv('winequality-red.csv', sep='\t')
-
 # Sidebar
 st.sidebar.header("Settings")
 show_data = st.sidebar.checkbox("Show raw data", True)
