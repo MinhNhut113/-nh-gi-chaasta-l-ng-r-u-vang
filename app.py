@@ -1,29 +1,31 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.svm import SVC
+from sklearn.svm import SVR
 from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
 
-# Load và train model
+# Load dữ liệu và train mô hình SVM
 @st.cache_data
-def train_model():
+def train_svm_model():
     data = pd.read_csv('winequality-red.csv')
     X = data.drop('quality', axis=1)
-    y = data['quality'].apply(lambda x: 1 if x >=7 else 0)  # Chất lượng cao >=7
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    model = SVC(kernel='rbf', probability=True)
-    model.fit(X_scaled, y)
-    return model, scaler
+    y = data['quality']
+    # Dùng pipeline chuẩn hóa rồi SVR
+    model = make_pipeline(StandardScaler(), SVR(kernel='rbf', C=100, epsilon=0.1))
+    model.fit(X, y)
+    return model
 
-model, scaler = train_model()
+model = train_svm_model()
 
-# Giao diện Streamlit
-st.set_page_config(page_title="Wine Quality SVM Prediction", layout="centered")
-st.title("🍷 Dự đoán chất lượng rượu vang bằng SVM")
-st.write("Nhập các chỉ số hóa học để dự đoán khả năng rượu vang chất lượng cao (>=7).")
+# Giao diện
+st.set_page_config(page_title="Wine Quality Prediction (SVM)", layout="centered")
+st.title("🍷 Dự đoán chất lượng rượu vang (SVM)")
+st.write("""
+Dựa trên các chỉ số hóa học để dự đoán điểm chất lượng (0-10) của rượu vang bằng mô hình **Support Vector Regression (SVR)**.
+""")
 
-# Tạo input (trống)
+# Input không có giá trị mặc định
 fixed_acidity = st.text_input("Fixed Acidity")
 volatile_acidity = st.text_input("Volatile Acidity")
 citric_acid = st.text_input("Citric Acid")
@@ -36,25 +38,33 @@ pH = st.text_input("pH")
 sulphates = st.text_input("Sulphates")
 alcohol = st.text_input("Alcohol")
 
-if st.button("Dự đoán"):
+if st.button("Dự đoán chất lượng"):
     try:
-        # Ép kiểu float
         features = np.array([[
-            float(fixed_acidity), float(volatile_acidity), float(citric_acid),
-            float(residual_sugar), float(chlorides), float(free_sulfur_dioxide),
-            float(total_sulfur_dioxide), float(density), float(pH),
-            float(sulphates), float(alcohol)
+            float(fixed_acidity),
+            float(volatile_acidity),
+            float(citric_acid),
+            float(residual_sugar),
+            float(chlorides),
+            float(free_sulfur_dioxide),
+            float(total_sulfur_dioxide),
+            float(density),
+            float(pH),
+            float(sulphates),
+            float(alcohol)
         ]])
         
-        features_scaled = scaler.transform(features)
-        prediction = model.predict(features_scaled)[0]
-        probability = model.predict_proba(features_scaled)[0][1] * 100
+        prediction = model.predict(features)[0]
+        prediction = round(prediction, 2)
         
-        if prediction == 1:
-            st.success(f"✅ Đây có thể là rượu vang **chất lượng cao** (≥7) với xác suất khoảng **{probability:.1f}%**.")
+        st.success(f"🎯 Điểm chất lượng dự đoán: **{prediction} / 10**")
+        if prediction >= 7:
+            st.markdown("✅ Đây là rượu vang **chất lượng cao**!")
+        elif prediction >= 5:
+            st.markdown("⚠️ Đây là rượu vang **trung bình**.")
         else:
-            st.warning(f"⚠️ Đây có thể **không phải rượu vang chất lượng cao** (xác suất chỉ khoảng **{probability:.1f}%**).")
+            st.markdown("🚫 Đây là rượu vang **chất lượng thấp**.")
 
     except ValueError:
-        st.error("❌ Vui lòng nhập đầy đủ và chính xác các chỉ số.")
+        st.error("❌ Vui lòng nhập đầy đủ và chính xác tất cả các chỉ số.")
 
