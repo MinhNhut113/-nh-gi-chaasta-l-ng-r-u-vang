@@ -20,9 +20,9 @@ model = train_svm_model()
 
 # Giao diện
 st.set_page_config(page_title="Wine Quality Prediction (SVM)", layout="centered")
-st.title("🍷 Dự đoán chất lượng rượu vang (SVM)")
+st.title("🍷 Dự đoán chất lượng rượu vang")
 st.write("""
-Dựa trên các chỉ số hóa học để dự đoán điểm chất lượng (0-10) của rượu vang bằng mô hình **Support Vector Regression (SVR)**.
+Dựa trên các chỉ số hóa học để dự đoán điểm chất lượng (0-10) của rượu.
 """)
 
 # Input không có giá trị mặc định
