@@ -42,7 +42,6 @@ font-family: 'Playfair Display', serif;
 color: #722f37;
 }
 .bg-wine {
-background-color: #722f37; 
 color: white;
 padding: 20px;
 border-radius: 8px;
