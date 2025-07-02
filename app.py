@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
-import pickle
 
 # Load dữ liệu và train model
 @st.cache_data
@@ -23,18 +22,18 @@ st.write("""
 Dựa trên các chỉ số hóa học để dự đoán điểm chất lượng (0-10) của rượu vang.
 """)
 
-# Tạo các input cho người dùng nhập
-fixed_acidity = st.number_input("Fixed Acidity")
-volatile_acidity = st.number_input("Volatile Acidity")
-citric_acid = st.number_input("Citric Acid")
-residual_sugar = st.number_input("Residual Sugar")
-chlorides = st.number_input("Chlorides")
-free_sulfur_dioxide = st.number_input("Free Sulfur Dioxide")
-total_sulfur_dioxide = st.number_input("Total Sulfur Dioxide")
-density = st.number_input("Density")
-pH = st.number_input("pH")
-sulphates = st.number_input("Sulphates")
-alcohol = st.number_input("Alcohol")
+# Các input không giới hạn (dùng min/max rộng)
+fixed_acidity = st.number_input("Fixed Acidity", min_value=-1e10, max_value=1e10)
+volatile_acidity = st.number_input("Volatile Acidity", min_value=-1e10, max_value=1e10)
+citric_acid = st.number_input("Citric Acid", min_value=-1e10, max_value=1e10)
+residual_sugar = st.number_input("Residual Sugar", min_value=-1e10, max_value=1e10)
+chlorides = st.number_input("Chlorides", min_value=-1e10, max_value=1e10)
+free_sulfur_dioxide = st.number_input("Free Sulfur Dioxide", min_value=-1e10, max_value=1e10)
+total_sulfur_dioxide = st.number_input("Total Sulfur Dioxide", min_value=-1e10, max_value=1e10)
+density = st.number_input("Density", min_value=-1e10, max_value=1e10)
+pH = st.number_input("pH", min_value=-1e10, max_value=1e10)
+sulphates = st.number_input("Sulphates", min_value=-1e10, max_value=1e10)
+alcohol = st.number_input("Alcohol", min_value=-1e10, max_value=1e10)
 
 if st.button("Dự đoán chất lượng"):
     features = np.array([[fixed_acidity, volatile_acidity, citric_acid, residual_sugar, chlorides,
