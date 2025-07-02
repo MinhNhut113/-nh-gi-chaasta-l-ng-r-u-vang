@@ -1,4 +1,3 @@
-code mô hình trên thành mô hình của đoạn code này
 import streamlit as st
 import pandas as pd
 import numpy as np
