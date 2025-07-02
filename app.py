@@ -27,6 +27,12 @@ st.set_page_config(page_title="Wine Quality Prediction", layout="wide")
 
 st.markdown("""
 <style>
+header {
+visibility: hidden;
+}
+.block-container {
+padding-top: 1rem;
+}
 body { 
 font-family: 'Raleway', sans-serif;
 background-color: #f8f3ed; 
