@@ -22,30 +22,47 @@ st.write("""
 Dựa trên các chỉ số hóa học để dự đoán điểm chất lượng (0-10) của rượu vang.
 """)
 
-# Các input không giới hạn (dùng min/max rộng)
-fixed_acidity = st.number_input("Fixed Acidity", min_value=-1e10, max_value=1e10)
-volatile_acidity = st.number_input("Volatile Acidity", min_value=-1e10, max_value=1e10)
-citric_acid = st.number_input("Citric Acid", min_value=-1e10, max_value=1e10)
-residual_sugar = st.number_input("Residual Sugar", min_value=-1e10, max_value=1e10)
-chlorides = st.number_input("Chlorides", min_value=-1e10, max_value=1e10)
-free_sulfur_dioxide = st.number_input("Free Sulfur Dioxide", min_value=-1e10, max_value=1e10)
-total_sulfur_dioxide = st.number_input("Total Sulfur Dioxide", min_value=-1e10, max_value=1e10)
-density = st.number_input("Density", min_value=-1e10, max_value=1e10)
-pH = st.number_input("pH", min_value=-1e10, max_value=1e10)
-sulphates = st.number_input("Sulphates", min_value=-1e10, max_value=1e10)
-alcohol = st.number_input("Alcohol", min_value=-1e10, max_value=1e10)
+# Tạo các input (mặc định để trống)
+fixed_acidity = st.text_input("Fixed Acidity")
+volatile_acidity = st.text_input("Volatile Acidity")
+citric_acid = st.text_input("Citric Acid")
+residual_sugar = st.text_input("Residual Sugar")
+chlorides = st.text_input("Chlorides")
+free_sulfur_dioxide = st.text_input("Free Sulfur Dioxide")
+total_sulfur_dioxide = st.text_input("Total Sulfur Dioxide")
+density = st.text_input("Density")
+pH = st.text_input("pH")
+sulphates = st.text_input("Sulphates")
+alcohol = st.text_input("Alcohol")
 
+# Xử lý nút dự đoán
 if st.button("Dự đoán chất lượng"):
-    features = np.array([[fixed_acidity, volatile_acidity, citric_acid, residual_sugar, chlorides,
-                          free_sulfur_dioxide, total_sulfur_dioxide, density, pH, sulphates, alcohol]])
-    prediction = model.predict(features)[0]
-    prediction = round(prediction, 2)
-    
-    st.success(f"🎯 Điểm chất lượng dự đoán: **{prediction} / 10**")
-    
-    if prediction >= 7:
-        st.markdown("✅ Đây là rượu vang **chất lượng cao**!")
-    elif prediction >= 5:
-        st.markdown("⚠️ Đây là rượu vang **trung bình**.")
-    else:
-        st.markdown("🚫 Đây là rượu vang **chất lượng thấp**.")
+    try:
+        # Ép kiểu sang float
+        features = np.array([[
+            float(fixed_acidity),
+            float(volatile_acidity),
+            float(citric_acid),
+            float(residual_sugar),
+            float(chlorides),
+            float(free_sulfur_dioxide),
+            float(total_sulfur_dioxide),
+            float(density),
+            float(pH),
+            float(sulphates),
+            float(alcohol)
+        ]])
+        
+        prediction = model.predict(features)[0]
+        prediction = round(prediction, 2)
+        
+        st.success(f"🎯 Điểm chất lượng dự đoán: **{prediction} / 10**")
+        if prediction >= 7:
+            st.markdown("✅ Đây là rượu vang **chất lượng cao**!")
+        elif prediction >= 5:
+            st.markdown("⚠️ Đây là rượu vang **trung bình**.")
+        else:
+            st.markdown("🚫 Đây là rượu vang **chất lượng thấp**.")
+
+    except ValueError:
+        st.error("❌ Vui lòng nhập đầy đủ và chính xác tất cả các chỉ số.")
