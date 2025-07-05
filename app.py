@@ -24,22 +24,18 @@ st.set_page_config(page_title="Wine Quality Prediction (SVM)", layout="wide")
 st.markdown("""
 <style>
 body { 
-    background-color: #000000; /* đổi nền thành đen */
-    color: white; /* đổi màu chữ chính thành trắng */
     font-family: 'Raleway', sans-serif; 
+    background-color: #f8f3ed; 
     font-size: 15px;
 }
-h1, h2, h3, h4, h5, h6, label, .css-10trblm, .css-1d391kg, .css-1v0mbdj, .css-qbe2hs {
-    color: white !important; /* buộc các thẻ tiêu đề, label màu trắng */
-}
-.stApp {
-    background-color: #000000;
+h1, h2 { 
+    font-family: 'Playfair Display', serif; 
 }
 .header-font {
     font-family: 'Playfair Display', serif;
 }
 .wine-red {
-    color: #f08c91; /* đổi màu đỏ sang tone nhẹ hơn trên nền đen */
+    color: #722f37; 
 }
 .bg-wine {
     color: white;
@@ -47,34 +43,33 @@ h1, h2, h3, h4, h5, h6, label, .css-10trblm, .css-1d391kg, .css-1v0mbdj, .css-qb
     border-radius: 8px;
 }
 .form-box { 
-    background-color: #111111; 
+    background-color: #722f37; 
     color: white;
     padding: 20px; 
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(255,255,255,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 .result-box { 
-    background-color: #111111;
+    background-color: #722f37;
     color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(255,255,255,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 .progress {
     height: 16px;
-    background-color: #444444; 
+    background-color: #e2e8f0; 
     border-radius: 8px;
     overflow: hidden; 
 }
 .progress-bar { 
     height: 100%;
-    background-color: #f08c91;
+    background-color: #f8f3ed;
     width: 0%;
     transition: width 0.5s; 
 }
 </style>
 """, unsafe_allow_html=True)
-
 
 # Tiêu đề
 st.markdown('<div class="bg-wine"><h1 class="header-font" style="text-align:center;">🍷 Dự đoán chất lượng rượu vang </h1></div>', unsafe_allow_html=True)
@@ -137,3 +132,4 @@ if predict_btn:
 else:
     st.info("Nhập thông tin rượu và bấm Predict để xem kết quả.")
 st.markdown('</div>', unsafe_allow_html=True)
+code đổi màu background trang web thành màu đen
