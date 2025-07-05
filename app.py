@@ -72,7 +72,7 @@ h1, h2 {
 """, unsafe_allow_html=True)
 
 # Tiêu đề
-st.markdown('<div class="bg-wine" style="background-color: #f8f3ed;"><h1 class="header-font" style="text-align:center; color:#722f37;">🍷 Dự đoán chất lượng rượu vang</h1></div>', unsafe_allow_html=True)
+st.markdown('<div class="bg-wine" style="background-color: white;"><h1 class="header-font" style="text-align:center; color:#722f37;">🍷 Dự đoán chất lượng rượu vang</h1></div>', unsafe_allow_html=True)
 
 # INPUT WINE PARAMETERS
 st.markdown('<div class="form-box"><h2 class="wine-red header-font">Input Wine Parameters</h2>', unsafe_allow_html=True)
