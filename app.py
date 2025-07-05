@@ -132,4 +132,3 @@ if predict_btn:
 else:
     st.info("Nhập thông tin rượu và bấm Predict để xem kết quả.")
 st.markdown('</div>', unsafe_allow_html=True)
-code đổi màu background trang web thành màu đen
